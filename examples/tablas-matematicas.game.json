@@ -1,0 +1,16 @@
+{
+  "format": "edumesh-game",
+  "version": 1,
+  "type": "math",
+  "title": "Tablas del 6, 7 y 8",
+  "locale": "es-MX",
+  "seed": 99,
+  "config": {
+    "tables": [6, 7, 8],
+    "max": 10,
+    "count": 10,
+    "timeLimit": 90,
+    "parSeconds": 6
+  },
+  "meta": { "subject": "Matemáticas", "grade": "Primaria" }
+}

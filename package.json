@@ -1,0 +1,25 @@
+{
+  "name": "motor-edu-mesh",
+  "version": "0.1.0",
+  "description": "Motor para crear videojuegos educativos: SDK en JS + formato de juego en JSON (firmable y distribuible por edu-mesh). Cero dependencias, corre en el navegador y en Node, 100% offline.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "src/engine/index.js",
+  "scripts": {
+    "test": "node --test",
+    "demo": "node scripts/serve.js",
+    "serve": "node scripts/serve.js"
+  },
+  "keywords": [
+    "education",
+    "game-engine",
+    "offline-first",
+    "edu-mesh",
+    "juegos-educativos",
+    "no-dependencies"
+  ],
+  "license": "MIT",
+  "author": "cesarMath27"
+}

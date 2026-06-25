@@ -1,0 +1,16 @@
+{
+  "format": "edumesh-game",
+  "version": 1,
+  "type": "wordsearch",
+  "title": "Sopa de letras: animales",
+  "locale": "es-MX",
+  "seed": 1234,
+  "config": {
+    "words": ["PERRO", "GATO", "AGUILA", "BALLENA", "ABEJA", "CABALLO", "TORTUGA", "DELFIN"],
+    "size": 12,
+    "allowReverse": true,
+    "allowDiagonal": true,
+    "timeLimit": 0
+  },
+  "meta": { "subject": "Ciencias Naturales", "grade": "Primaria" }
+}
