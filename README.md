@@ -18,9 +18,10 @@ salón, igual que cualquier otro contenido.
 ```
 
 - **Cero dependencias.** JS puro y módulos ES. Corre en el navegador y en Node ≥ 18 (para pruebas). Sin paso de compilación.
-- **Dos formas de crear juegos:**
+- **Tres formas de crear juegos:**
+  - **Editor visual sin código** ([`editor.html`](editor.html)): un maestro llena formularios, **prueba el juego al instante** y descarga el `.game.json`. Sin programar.
   - **SDK (programadores):** API imperativa — `new Game()`, escenas, entidades, eventos, `win()`/`lose()`.
-  - **Datos (`.game.json`):** una definición declarativa para los tipos integrados; un maestro puede afinarla sin programar.
+  - **Datos (`.game.json`):** una definición declarativa para los tipos integrados, escrita a mano o exportada por el editor.
 - **Juegos como contenido firmable.** Un `.game.json` es solo texto: encaja en el modelo de contenido **curado y firmado (Ed25519)** de edu-mesh y viaja por su distribución P2P.
 - **Reproducible.** El azar usa una **semilla**: el mismo juego sale igual en todos los dispositivos.
 - **Accesible y para celular.** Objetivos táctiles grandes, teclado, modo claro/oscuro y **sonido sintetizado** (Web Audio, sin archivos).
@@ -36,8 +37,8 @@ npm run demo          # inicia un servidor local (sin dependencias) e imprime la
 ```
 
 Abre la URL que imprime (por defecto `http://localhost:8090`) y prueba los juegos
-de ejemplo. También puedes **ver/editar el JSON** de cada juego y volver a jugar
-en el momento.
+de ejemplo. Para **crear uno propio**, entra al **editor visual** en
+`http://localhost:8090/editor.html` (o el enlace ✏️ del demo).
 
 > ¿Por qué un servidor y no abrir `index.html` directo? Los módulos ES y el
 > `fetch` de los `.game.json` necesitan `http://` (el navegador bloquea `file://`).
@@ -45,7 +46,7 @@ en el momento.
 Pruebas de la lógica del motor (deterministas, sin navegador):
 
 ```bash
-npm test              # node --test  (26 pruebas, 0 dependencias)
+npm test              # node --test  (35 pruebas, 0 dependencias)
 ```
 
 ---
@@ -140,6 +141,24 @@ Cada tipo se describe con un `.game.json`. Hay ejemplos completos en
   loadGame(def, { mount: '#app' }).start();
 </script>
 ```
+
+---
+
+## Editor visual (sin código) ✏️
+
+Para maestros: **crea un juego llenando formularios**, sin tocar código. Abre
+[`editor.html`](editor.html) (con `npm run demo`, en `…/editor.html`).
+
+1. **Datos del juego:** título, materia, grado (y una semilla opcional para fijar el tablero).
+2. **Tipo de juego:** elige `memory`, `math`, `fill` o `wordsearch`. El formulario se adapta solo.
+3. **Contenido:** agrega pares, frases con `{huecos}`, palabras o problemas con los botones **＋**.
+4. **▶ Probar:** juega tu creación al instante (es el mismo motor).
+5. **⬇ Descargar** el `.game.json` — o **⧉ copiarlo**. Con **⬆ Importar** vuelves a editar uno existente.
+
+El `.game.json` que produce es **idéntico** al que consume el motor y al que
+edu-mesh puede **firmar y repartir**: el editor no es un formato aparte, es la
+forma cómoda de escribir el mismo archivo. La lógica de armado/validación es pura
+y está probada (ver [`src/editor/schema.js`](src/editor/schema.js)).
 
 ---
 
@@ -243,6 +262,7 @@ El flujo pensado:
 ```
 motor-edu-mesh/
 ├── index.html                 # demo jugable (menú + probador de JSON)
+├── editor.html                # editor visual sin código (para maestros)
 ├── src/
 │   ├── engine/                # NÚCLEO del motor (SDK)
 │   │   ├── index.js           #   API pública
@@ -260,6 +280,10 @@ motor-edu-mesh/
 │   ├── games/                 # TIPOS integrados (plugins sobre el motor)
 │   │   ├── memory.js · math.js · fill.js · wordsearch.js
 │   │   └── index.js           #   registra los tipos
+│   ├── editor/                # EDITOR visual (formularios → .game.json)
+│   │   ├── schema.js          #   esquemas + armado/validación (lógica pura)
+│   │   ├── editor.js          #   interfaz del editor
+│   │   └── editor.css
 │   └── styles.css             # estilos del motor y de los juegos (claro/oscuro)
 ├── examples/                  # 4 juegos como .game.json + 1 con el SDK
 ├── scripts/serve.js           # servidor estático del demo (sin dependencias)
@@ -272,11 +296,12 @@ motor-edu-mesh/
 
 - Los juegos integrados son **de un jugador y locales** (no en vivo). El cuestionario en
   vivo estilo Kahoot ya existe en edu-mesh; este motor cubre el **juego individual offline**.
-- La lógica está probada (26 pruebas) y el render se verificó en un navegador real,
+- La lógica está probada (35 pruebas) y el render se verificó en un navegador real,
   **pero no a escala de un salón** → haz un piloto antes de depender de él en clase.
+- El editor visual cubre los 4 tipos integrados; aún no edita juegos hechos con el SDK
+  (esos viven en código).
 - Posibles siguientes pasos: más tipos (arrastrar/clasificar, trivia para un jugador),
-  un editor visual para maestros sobre este mismo formato, registro de resultados en el
-  catálogo de edu-mesh, e imágenes/audio en las cartas y huecos.
+  imágenes/audio en cartas y huecos, y registrar los resultados en el catálogo de edu-mesh.
 
 ## Licencia
 MIT — libre y gratis. Ver [LICENSE](LICENSE).

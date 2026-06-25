@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>motor-edu-mesh · editor</title>
+  <link rel="stylesheet" href="./src/styles.css" />
+  <link rel="stylesheet" href="./src/editor/editor.css" />
+  <style>
+    body { margin: 0; background: var(--bg); color: var(--ink);
+           font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 18px 14px 70px; }
+    .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .top h1 { margin: .2em 0; font-size: 1.5rem; }
+    .top a { color: var(--primary); font-weight: 700; text-decoration: none; }
+    .lead { color: var(--ink-soft); margin: 0 0 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>✏️ Editor de juegos</h1>
+        <p class="lead">Crea un videojuego educativo sin programar. Pruébalo y descarga el <code>.game.json</code>.</p>
+      </div>
+      <a href="./index.html">▶ Ir al demo</a>
+    </div>
+    <div id="editor"></div>
+  </div>
+
+  <script type="module">
+    import { mountEditor } from './src/editor/editor.js';
+    mountEditor('#editor');
+  </script>
+</body>
+</html>
