@@ -1,0 +1,26 @@
+{
+  "format": "edumesh-game",
+  "version": 1,
+  "type": "memory",
+  "title": "Capitales de México",
+  "locale": "es-MX",
+  "seed": 4242,
+  "config": {
+    "columns": 4,
+    "maxPairs": 8,
+    "timeLimit": 0,
+    "pairs": [
+      { "a": "Jalisco", "b": "Guadalajara" },
+      { "a": "Nuevo León", "b": "Monterrey" },
+      { "a": "Yucatán", "b": "Mérida" },
+      { "a": "Veracruz", "b": "Xalapa" },
+      { "a": "Sonora", "b": "Hermosillo" },
+      { "a": "Chiapas", "b": "Tuxtla Gutiérrez" },
+      { "a": "Oaxaca", "b": "Oaxaca de Juárez" },
+      { "a": "Michoacán", "b": "Morelia" },
+      { "a": "Guanajuato", "b": "Guanajuato" },
+      { "a": "Sinaloa", "b": "Culiacán" }
+    ]
+  },
+  "meta": { "subject": "Geografía", "grade": "Primaria", "author": "edu-mesh" }
+}

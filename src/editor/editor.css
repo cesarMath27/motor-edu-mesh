@@ -1,0 +1,83 @@
+/* ============================================================================
+   motor-edu-mesh — estilos del EDITOR VISUAL
+   Usa las variables de tema de src/styles.css (claro/oscuro).
+   ============================================================================ */
+
+.ed-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+@media (min-width: 820px) {
+  .ed-grid { grid-template-columns: 1.05fr 1fr; align-items: start; }
+  .ed-col:last-child { position: sticky; top: 14px; }
+}
+
+.ed-h2 {
+  font-size: .8rem; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--ink-soft); margin: 18px 0 8px;
+}
+.ed-section { display: flex; flex-direction: column; gap: 12px; }
+
+/* ---- Campos -------------------------------------------------------------- */
+.ed-field { display: flex; flex-direction: column; gap: 5px; }
+.ed-field-inline { padding: 2px 0; }
+.ed-label { font-weight: 700; font-size: .92rem; }
+.ed-help { color: var(--ink-soft); font-size: .82rem; }
+
+.ed-input {
+  font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px;
+  width: 100%; min-height: 46px;
+}
+.ed-input:focus { outline: 2px solid var(--primary); outline-offset: 1px; border-color: transparent; }
+.ed-select { appearance: none; cursor: pointer; }
+.ed-area { min-height: 110px; resize: vertical; font-family: ui-monospace, Menlo, monospace; }
+
+.ed-check { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; font-weight: 600; }
+.ed-check input { width: 20px; height: 20px; accent-color: var(--primary); }
+.ed-multi { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 4px 0; }
+
+/* ---- Filas repetibles ---------------------------------------------------- */
+.ed-rows { display: flex; flex-direction: column; gap: 8px; }
+.ed-row { display: flex; gap: 8px; align-items: center; }
+.ed-row .ed-input { flex: 1; min-width: 0; }
+.ed-row .ed-wide { flex: 2.2; }
+.ed-row-del {
+  flex: 0 0 auto; width: 40px; height: 40px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--bad); border-radius: 10px; cursor: pointer; font-size: 1rem;
+}
+.ed-row-del:hover { background: var(--surface-2); }
+.ed-add {
+  align-self: flex-start; margin-top: 4px; border: 1px dashed var(--line);
+  background: var(--surface-2); color: var(--primary); font: inherit; font-weight: 700;
+  padding: 9px 16px; border-radius: 10px; cursor: pointer; min-height: 42px;
+}
+
+/* ---- Acciones / salida --------------------------------------------------- */
+.ed-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
+.ed-actions .em-btn { flex: 1 1 auto; padding: 11px 14px; min-height: 46px; }
+.em-btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+.ed-errors { display: flex; flex-direction: column; gap: 3px; margin-bottom: 12px; }
+.ed-errs-title { font-weight: 700; color: var(--bad); }
+.ed-err { color: var(--bad); font-size: .9rem; }
+
+.ed-json {
+  width: 100%; min-height: 280px; font-family: ui-monospace, Menlo, monospace; font-size: .8rem;
+  border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+  background: var(--surface-2); color: var(--ink); resize: vertical;
+}
+
+/* ---- Vista previa (modal) ------------------------------------------------ */
+.ed-overlay {
+  position: fixed; inset: 0; background: rgba(10, 14, 28, .55);
+  display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 50;
+}
+.ed-overlay[hidden] { display: none; }
+.ed-modal {
+  background: var(--bg); border: 1px solid var(--line); border-radius: 18px;
+  box-shadow: var(--shadow); width: min(620px, 100%); max-height: 92vh; overflow: auto; padding: 12px 14px 20px;
+}
+.ed-modal-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.ed-modal-bar .em-btn { padding: 8px 14px; min-height: 40px; }

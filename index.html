@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>motor-edu-mesh · demo</title>
+  <link rel="stylesheet" href="./src/styles.css" />
+  <style>
+    body { margin: 0; background: var(--bg); color: var(--ink);
+           font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 18px 14px 60px; }
+    .head h1 { margin: .2em 0 .1em; font-size: 1.5rem; }
+    .head p { margin: 0 0 18px; color: var(--ink-soft); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+    .gcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+             padding: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px; }
+    .gcard h3 { margin: 0; font-size: 1.05rem; }
+    .badge { align-self: flex-start; font-size: .72rem; font-weight: 700; color: #fff;
+             background: var(--accent); padding: 3px 9px; border-radius: 999px; }
+    .badge.sdk { background: var(--primary); }
+    .gcard .em-btn { width: 100%; padding: 10px; min-height: 44px; }
+    .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .link { background: none; border: none; color: var(--primary); font: inherit; font-weight: 700;
+            cursor: pointer; padding: 8px; }
+    details { margin-top: 18px; background: var(--surface); border: 1px solid var(--line);
+              border-radius: 14px; padding: 10px 14px; }
+    summary { cursor: pointer; font-weight: 700; }
+    textarea { width: 100%; min-height: 220px; margin-top: 10px; font-family: ui-monospace, Menlo, monospace;
+               font-size: .82rem; border: 1px solid var(--line); border-radius: 10px; padding: 10px;
+               background: var(--surface-2); color: var(--ink); }
+    .note { color: var(--ink-soft); font-size: .85rem; }
+    .err { color: var(--bad); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <h1>🎮 motor-edu-mesh</h1>
+      <p>Motor de videojuegos educativos · juegos como datos (<code>.game.json</code>) o con el SDK · 100% offline.</p>
+      <p style="margin:.2em 0 0"><a href="./editor.html" style="color:var(--primary);font-weight:700;text-decoration:none">✏️ Abrir el editor visual (crear un juego sin programar)</a></p>
+    </div>
+
+    <section id="menu">
+      <div id="grid" class="grid"></div>
+      <p id="hint" class="note" style="margin-top:18px"></p>
+    </section>
+
+    <section id="play" hidden>
+      <div class="topbar">
+        <button class="link" id="back">← Volver a los juegos</button>
+      </div>
+      <div id="game"></div>
+      <details id="defBox">
+        <summary>Ver / editar la definición</summary>
+        <textarea id="defText" spellcheck="false"></textarea>
+        <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="em-btn em-btn-primary" id="apply">Aplicar y volver a jugar</button>
+          <span id="defErr" class="err"></span>
+        </div>
+        <p class="note">Edita el JSON y pulsa “Aplicar”. Así un maestro afina un juego sin programar.</p>
+      </details>
+    </section>
+  </div>
+
+  <script type="module">
+    import { loadGame, el } from './src/engine/index.js';
+    import './src/games/index.js';
+
+    const EXAMPLES = [
+      { file: 'examples/capitales-memoria.game.json', kind: 'json' },
+      { file: 'examples/fotosintesis-completar.game.json', kind: 'json' },
+      { file: 'examples/tablas-matematicas.game.json', kind: 'json' },
+      { file: 'examples/animales-sopa.game.json', kind: 'json' },
+      { file: 'examples/sumas-sdk.game.js', kind: 'sdk' },
+    ];
+    const TYPE_LABEL = { memory: 'Memoria', math: 'Matemáticas', fill: 'Completar', wordsearch: 'Sopa de letras', custom: 'SDK' };
+
+    const $ = (id) => document.getElementById(id);
+    let current = null;
+    let entries = [];
+
+    async function init() {
+      try {
+        for (const ex of EXAMPLES) {
+          if (ex.kind === 'json') {
+            const def = await fetch(ex.file).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+            entries.push({ ...ex, def, title: def.title, type: def.type });
+          } else {
+            const mod = await import('./' + ex.file);
+            entries.push({ ...ex, mod, title: mod.meta.title, type: mod.meta.type });
+          }
+        }
+        renderMenu();
+      } catch (e) {
+        $('hint').innerHTML = '⚠️ No se pudieron cargar los ejemplos abriendo el archivo directamente. ' +
+          'Inicia un servidor local con <code>npm run demo</code> y abre la URL que imprime.';
+      }
+    }
+
+    function renderMenu() {
+      const grid = $('grid');
+      grid.replaceChildren();
+      entries.forEach((entry, i) => {
+        const btn = el('button', { class: 'em-btn em-btn-primary' }, '▶ Jugar');
+        btn.addEventListener('click', () => play(i));
+        grid.append(el('div', { class: 'gcard' }, [
+          el('span', { class: 'badge' + (entry.kind === 'sdk' ? ' sdk' : ''), text: TYPE_LABEL[entry.type] || entry.type }),
+          el('h3', { text: entry.title }),
+          btn,
+        ]));
+      });
+      $('hint').textContent = 'Toca un juego para probarlo. Cada uno funciona sin instalar nada.';
+    }
+
+    function startGame(entry, overrideDef) {
+      const mount = $('game');
+      mount.replaceChildren();
+      if (current) { try { current.destroy?.(); } catch {} }
+      if (entry.kind === 'json') {
+        current = loadGame(overrideDef || entry.def, { mount });
+        $('defText').value = JSON.stringify(overrideDef || entry.def, null, 2);
+        $('defBox').hidden = false;
+      } else {
+        current = entry.mod.build({ mount });
+        $('defText').value = '// Este juego se construye con el SDK.\n// Código: ' + entry.file;
+        $('defBox').hidden = false;
+      }
+      $('defErr').textContent = '';
+      current.start();
+    }
+
+    let playingIndex = -1;
+    function play(i) {
+      playingIndex = i;
+      $('menu').hidden = true;
+      $('play').hidden = false;
+      window.scrollTo(0, 0);
+      startGame(entries[i]);
+    }
+
+    $('back').addEventListener('click', () => {
+      if (current) { try { current.destroy?.(); } catch {} current = null; }
+      $('play').hidden = true;
+      $('menu').hidden = false;
+    });
+
+    $('apply').addEventListener('click', () => {
+      const entry = entries[playingIndex];
+      if (entry.kind !== 'json') return;
+      try {
+        const def = JSON.parse($('defText').value);
+        $('defErr').textContent = '';
+        startGame(entry, def);
+      } catch (e) {
+        $('defErr').textContent = 'JSON inválido: ' + e.message;
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>

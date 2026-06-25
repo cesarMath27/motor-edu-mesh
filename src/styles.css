@@ -1,0 +1,206 @@
+/* ============================================================================
+   motor-edu-mesh — estilos del motor y de los juegos
+   Mobile-first, claro/oscuro automático, objetivos táctiles grandes.
+   ============================================================================ */
+
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #eef1f8;
+  --ink: #1f2540;
+  --ink-soft: #5b6480;
+  --primary: #4f46e5;
+  --primary-ink: #ffffff;
+  --accent: #0ea5a4;
+  --ok: #16a34a;
+  --bad: #dc2626;
+  --line: #dde2ee;
+  --shadow: 0 6px 20px rgba(31, 37, 64, 0.12);
+  --radius: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1422;
+    --surface: #171d2e;
+    --surface-2: #1f2740;
+    --ink: #eef1fb;
+    --ink-soft: #aab2cf;
+    --primary: #6366f1;
+    --accent: #2dd4bf;
+    --line: #2a3354;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+  }
+}
+
+* { box-sizing: border-box; }
+
+.em-game {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 12px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* ---- HUD ----------------------------------------------------------------- */
+.em-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+}
+.em-title { font-weight: 700; font-size: 1.05rem; }
+.em-hud-right { display: flex; align-items: center; gap: 10px; }
+.em-score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: var(--primary);
+  min-width: 2ch;
+  text-align: right;
+}
+.em-timer { font-variant-numeric: tabular-nums; color: var(--ink-soft); font-weight: 600; }
+.em-mute {
+  border: none; background: var(--surface-2); color: var(--ink);
+  border-radius: 10px; width: 38px; height: 38px; font-size: 1.1rem; cursor: pointer;
+}
+
+.em-stage { display: block; }
+
+/* ---- Botones ------------------------------------------------------------- */
+.em-btn {
+  appearance: none; border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink); font: inherit; font-weight: 700;
+  padding: 14px 20px; border-radius: 14px; cursor: pointer;
+  min-height: 48px; transition: transform .05s ease, filter .15s ease;
+}
+.em-btn:active { transform: translateY(1px); }
+.em-btn-primary { background: var(--primary); color: var(--primary-ink); border-color: transparent; }
+.em-btn-primary:hover { filter: brightness(1.05); }
+
+/* ---- Retroalimentación --------------------------------------------------- */
+.em-feedback { min-height: 1.4em; margin: 10px 0; font-weight: 700; text-align: center; }
+.em-feedback.ok { color: var(--ok); }
+.em-feedback.bad { color: var(--bad); }
+
+/* ---- Pantalla de fin ----------------------------------------------------- */
+.em-end {
+  text-align: center; background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 28px 20px; animation: em-pop .35s ease;
+}
+.em-end-emoji { font-size: 3.4rem; line-height: 1; }
+.em-end-title { margin: 8px 0 4px; }
+.em-end-score { font-size: 2rem; font-weight: 800; color: var(--primary); }
+.em-end-detail { color: var(--ink-soft); margin-bottom: 18px; }
+@keyframes em-pop { from { transform: scale(.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ============================================================================
+   MEMORIA / PAREJAS
+   ============================================================================ */
+.em-mem-board {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 4), 1fr);
+  gap: 10px;
+}
+.em-card {
+  appearance: none; border: none; background: transparent; padding: 0; cursor: pointer;
+  aspect-ratio: 3 / 4; perspective: 700px;
+}
+.em-card-inner {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d; transition: transform .35s ease;
+}
+.em-card.revealed .em-card-inner { transform: rotateY(180deg); }
+.em-card-face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  border-radius: 14px; padding: 6px; font-weight: 700; box-shadow: var(--shadow);
+  overflow: hidden; word-break: break-word; font-size: clamp(.7rem, 3.4vw, 1rem);
+}
+.em-card-back {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-size: 1.6rem;
+}
+.em-card-front { transform: rotateY(180deg); background: var(--surface); border: 1px solid var(--line); }
+.em-card-front.kind-b { background: var(--surface-2); }
+.em-card.matched .em-card-inner { transform: rotateY(180deg); }
+.em-card.matched .em-card-front { outline: 3px solid var(--ok); animation: em-pop .3s ease; }
+.em-card:disabled { cursor: default; }
+
+/* ============================================================================
+   MATEMÁTICAS
+   ============================================================================ */
+.em-math { text-align: center; }
+.em-math-prog { color: var(--ink-soft); font-weight: 600; }
+.em-math-problem { font-size: clamp(2rem, 9vw, 3rem); font-weight: 800; margin: 14px 0 6px; }
+.em-math-display {
+  font-size: 1.8rem; font-weight: 800; color: var(--primary);
+  min-height: 1.4em; font-variant-numeric: tabular-nums;
+  background: var(--surface); border: 2px dashed var(--line); border-radius: 12px;
+  padding: 6px; margin: 0 auto 6px; max-width: 220px;
+}
+.em-keypad {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 320px; margin: 8px auto 0;
+}
+.em-key {
+  appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  font: inherit; font-size: 1.5rem; font-weight: 700; border-radius: 14px;
+  min-height: 60px; cursor: pointer; transition: transform .05s ease;
+}
+.em-key:active { transform: translateY(1px); background: var(--surface-2); }
+.em-key-wide { grid-column: span 2; }
+.em-key-ok { grid-column: span 3; background: var(--primary); color: #fff; border-color: transparent; }
+
+/* ============================================================================
+   COMPLETAR
+   ============================================================================ */
+.em-fill { }
+.em-fill-prog { color: var(--ink-soft); font-weight: 600; margin-bottom: 10px; }
+.em-fill-sentence {
+  font-size: 1.25rem; line-height: 2.1; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
+}
+.em-blank {
+  font: inherit; font-size: 1rem; text-align: center; color: var(--primary); font-weight: 700;
+  border: none; border-bottom: 2px solid var(--primary); background: var(--surface-2);
+  border-radius: 8px 8px 0 0; padding: 2px 8px; margin: 0 2px; min-width: 4ch;
+}
+.em-blank.ok { color: var(--ok); border-color: var(--ok); }
+.em-blank.bad { color: var(--bad); border-color: var(--bad); }
+.em-fill-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+.em-chip {
+  appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  font: inherit; font-weight: 600; padding: 8px 14px; border-radius: 999px; cursor: pointer; min-height: 40px;
+}
+.em-chip:active { background: var(--surface-2); }
+.em-fill .em-btn { width: 100%; margin-top: 6px; }
+
+/* ============================================================================
+   SOPA DE LETRAS
+   ============================================================================ */
+.em-ws-words { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 12px; justify-content: center; }
+.em-ws-word { font-weight: 700; color: var(--ink-soft); }
+.em-ws-word.found { color: var(--ok); text-decoration: line-through; }
+.em-ws-board {
+  display: grid; grid-template-columns: repeat(var(--n, 10), 1fr); gap: 3px;
+  touch-action: none; /* el arrastre no debe desplazar la página */
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 8px; box-shadow: var(--shadow);
+}
+.em-ws-cell {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; border-radius: 7px; font-size: clamp(.7rem, 3.2vw, 1.05rem);
+  background: var(--surface-2); color: var(--ink); cursor: pointer;
+}
+.em-ws-cell.sel { background: var(--primary); color: #fff; }
+.em-ws-cell.found { background: var(--accent); color: #042f2e; }
+.em-ws-cell.found.sel { background: var(--ok); color: #fff; }

@@ -1,0 +1,26 @@
+{
+  "format": "edumesh-game",
+  "version": 1,
+  "type": "fill",
+  "title": "La célula y la fotosíntesis",
+  "locale": "es-MX",
+  "seed": 7,
+  "config": {
+    "shuffle": true,
+    "caseSensitive": false,
+    "accentSensitive": false,
+    "items": [
+      {
+        "text": "La fotosíntesis ocurre en el {cloroplasto} de la célula vegetal.",
+        "bank": ["cloroplasto", "mitocondria", "núcleo", "ribosoma"]
+      },
+      {
+        "text": "La {mitocondria} es la central de energía de la célula.",
+        "bank": ["mitocondria", "vacuola", "pared", "cloroplasto"]
+      },
+      { "text": "El pigmento verde que capta la luz del sol es la {clorofila}." },
+      { "text": "Las plantas toman {dióxido de carbono} y liberan {oxígeno}." }
+    ]
+  },
+  "meta": { "subject": "Ciencias Naturales", "grade": "Secundaria" }
+}
